@@ -27,6 +27,8 @@ A production-ready headless web crawler that renders JavaScript-heavy websites w
 
 ### Option 1: Local Setup
 
+**Linux / macOS:**
+
 ```bash
 # Clone the repository
 git clone https://github.com/<your-username>/generic-web-crawler.git
@@ -39,6 +41,20 @@ cd generic-web-crawler
 ./manage.sh crawl https://www.python.org/ --max-pages 20 --max-depth 2
 ```
 
+**Windows (PowerShell):**
+
+```powershell
+# Clone the repository
+git clone https://github.com/<your-username>/generic-web-crawler.git
+cd generic-web-crawler
+
+# Install dependencies and Playwright Chromium
+.\manage.ps1 setup
+
+# Crawl a website
+.\manage.ps1 crawl https://www.python.org/ --max-pages 20 --max-depth 2
+```
+
 ### Option 2: Docker
 
 ```bash
@@ -47,13 +63,18 @@ git clone https://github.com/<your-username>/generic-web-crawler.git
 cd generic-web-crawler
 
 # Build and run
+docker compose build
 docker compose run --rm crawler crawl https://www.python.org/ --max-pages 20 --max-depth 2
 ```
 
 ### Option 3: Python CLI
 
 ```bash
-# After setup
+# Install dependencies
+pip install -r requirements.txt
+python -m playwright install chromium
+
+# Crawl a website
 python main.py crawl https://www.python.org/ --max-pages 20 --max-depth 2
 ```
 
@@ -62,58 +83,76 @@ python main.py crawl https://www.python.org/ --max-pages 20 --max-depth 2
 ### Crawl a Site
 
 ```bash
+# Linux/macOS
 ./manage.sh crawl <url> [options]
+
+# Windows PowerShell
+.\manage.ps1 crawl <url> [options]
+
+# Direct Python
+python main.py crawl <url> [options]
 ```
 
-| Option | Description |
-|---|---|
-| `--max-pages N` | Maximum number of pages to crawl (default: 100) |
-| `--max-depth N` | Maximum link depth from seed (default: 2) |
-| `--delay SECONDS` | Delay between requests in seconds (default: 1.0) |
-| `--timeout SECONDS` | Request timeout in seconds (default: 30) |
-| `--wait-ms MS` | Page load wait in milliseconds (default: 2000) |
-| `--min-text-length N` | Minimum text length to consider a page valid (default: 80) |
-| `--seed-url URL` | Additional seed URL (repeatable) |
-| `--allowed-domain DOMAIN` | Additional allowed domain (repeatable) |
-| `--allowed-prefix PATH` | Allowed URL path prefix (repeatable) |
-| `--blocked-pattern PAT` | URL pattern to block (repeatable) |
-| `--no-sitemap` | Disable sitemap discovery |
-| `--no-dynamic-expand` | Disable dynamic content expansion |
-| `--ignore-robots` | Ignore robots.txt restrictions |
-| `--no-path-filter` | Crawl entire domain regardless of base URL path |
-| `--proxy URL` | Proxy server URL (repeatable for rotation) |
-| `--cookie-file PATH` | Path to JSON cookie file for session seeding |
-| `--save-cookies PATH` | Save session cookies after crawl |
+| Option                    | Description                                                |
+| ------------------------- | ---------------------------------------------------------- |
+| `--max-pages N`           | Maximum number of pages to crawl (default: 100)            |
+| `--max-depth N`           | Maximum link depth from seed (default: 2)                  |
+| `--delay SECONDS`         | Delay between requests in seconds (default: 1.0)           |
+| `--timeout SECONDS`       | Request timeout in seconds (default: 30)                   |
+| `--wait-ms MS`            | Page load wait in milliseconds (default: 2000)             |
+| `--min-text-length N`     | Minimum text length to consider a page valid (default: 80) |
+| `--seed-url URL`          | Additional seed URL (repeatable)                           |
+| `--allowed-domain DOMAIN` | Additional allowed domain (repeatable)                     |
+| `--allowed-prefix PATH`   | Allowed URL path prefix (repeatable)                       |
+| `--blocked-pattern PAT`   | URL pattern to block (repeatable)                          |
+| `--no-sitemap`            | Disable sitemap discovery                                  |
+| `--no-dynamic-expand`     | Disable dynamic content expansion                          |
+| `--ignore-robots`         | Ignore robots.txt restrictions                             |
+| `--no-path-filter`        | Crawl entire domain regardless of base URL path            |
+| `--proxy URL`             | Proxy server URL (repeatable for rotation)                 |
+| `--cookie-file PATH`      | Path to JSON cookie file for session seeding               |
+| `--save-cookies PATH`     | Save session cookies after crawl                           |
 
 ### Check Status
 
 ```bash
+# Linux/macOS
 ./manage.sh status <url>
+
+# Windows PowerShell
+.\manage.ps1 status <url>
+
+# Direct Python
+python main.py status <url>
 ```
 
 ### View Logs
 
 ```bash
+# Linux/macOS
 ./manage.sh logs
+
+# Windows PowerShell
+.\manage.ps1 logs
 ```
 
 ## Examples
 
 ```bash
 # Basic crawl
-./manage.sh crawl https://docs.python.org/3/ --max-pages 50
+python main.py crawl https://docs.python.org/3/ --max-pages 50
 
 # Broad domain crawl ignoring path restrictions
-./manage.sh crawl https://example.com/blog/ --no-path-filter --max-pages 200
+python main.py crawl https://example.com/blog/ --no-path-filter --max-pages 200
 
 # Crawl behind a proxy with robots.txt bypass
-./manage.sh crawl https://example.com/ --proxy http://proxy:8080 --ignore-robots
+python main.py crawl https://example.com/ --proxy http://proxy:8080 --ignore-robots
 
 # Crawl with cookie authentication
-./manage.sh crawl https://example.com/ --cookie-file cookies.json --save-cookies session.json
+python main.py crawl https://example.com/ --cookie-file cookies.json --save-cookies session.json
 
 # Fast shallow crawl
-./manage.sh crawl https://example.com/ --max-depth 1 --max-pages 10 --delay 0.5
+python main.py crawl https://example.com/ --max-depth 1 --max-pages 10 --delay 0.5
 ```
 
 ## Output Structure
@@ -147,26 +186,26 @@ cp .env.example .env
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `CRAWL_BASE_URL` | *(required)* | Target website URL |
-| `CRAWL_MAX_DEPTH` | `2` | Maximum crawl depth |
-| `CRAWL_MAX_PAGES` | `100` | Maximum pages to crawl |
-| `CRAWL_REQUEST_DELAY` | `1.0` | Seconds between requests |
-| `CRAWL_REQUEST_TIMEOUT` | `30` | Request timeout in seconds |
-| `CRAWL_PAGE_LOAD_WAIT_MS` | `2000` | Wait for JS rendering (ms) |
-| `CRAWL_MIN_TEXT_LENGTH` | `80` | Minimum text to accept a page |
-| `CRAWL_USE_SITEMAP` | `true` | Discover URLs from sitemaps |
-| `CRAWL_EXPAND_DYNAMIC` | `true` | Expand tabs, accordions, modals |
-| `CRAWL_IGNORE_ROBOTS` | `false` | Bypass robots.txt |
-| `CRAWL_NO_PATH_FILTER` | `false` | Crawl entire domain |
-| `CRAWL_ALLOWED_DOMAINS` | *(from URL)* | Comma-separated allowed domains |
-| `CRAWL_ALLOWED_PATH_PREFIXES` | *(from URL)* | Comma-separated path prefixes |
-| `SEED_URLS` | *(from URL)* | Comma-separated seed URLs |
-| `CRAWL_PROXY_LIST` | | Comma-separated proxy URLs |
-| `CRAWL_COOKIE_FILE` | | Path to cookie JSON file |
-| `CRAWL_CHECKPOINT_INTERVAL` | `10` | Pages between checkpoints |
-| `LOG_LEVEL` | `INFO` | Logging level |
+| Variable                      | Default      | Description                     |
+| ----------------------------- | ------------ | ------------------------------- |
+| `CRAWL_BASE_URL`              | _(required)_ | Target website URL              |
+| `CRAWL_MAX_DEPTH`             | `2`          | Maximum crawl depth             |
+| `CRAWL_MAX_PAGES`             | `100`        | Maximum pages to crawl          |
+| `CRAWL_REQUEST_DELAY`         | `1.0`        | Seconds between requests        |
+| `CRAWL_REQUEST_TIMEOUT`       | `30`         | Request timeout in seconds      |
+| `CRAWL_PAGE_LOAD_WAIT_MS`     | `2000`       | Wait for JS rendering (ms)      |
+| `CRAWL_MIN_TEXT_LENGTH`       | `80`         | Minimum text to accept a page   |
+| `CRAWL_USE_SITEMAP`           | `true`       | Discover URLs from sitemaps     |
+| `CRAWL_EXPAND_DYNAMIC`        | `true`       | Expand tabs, accordions, modals |
+| `CRAWL_IGNORE_ROBOTS`         | `false`      | Bypass robots.txt               |
+| `CRAWL_NO_PATH_FILTER`        | `false`      | Crawl entire domain             |
+| `CRAWL_ALLOWED_DOMAINS`       | _(from URL)_ | Comma-separated allowed domains |
+| `CRAWL_ALLOWED_PATH_PREFIXES` | _(from URL)_ | Comma-separated path prefixes   |
+| `SEED_URLS`                   | _(from URL)_ | Comma-separated seed URLs       |
+| `CRAWL_PROXY_LIST`            |              | Comma-separated proxy URLs      |
+| `CRAWL_COOKIE_FILE`           |              | Path to cookie JSON file        |
+| `CRAWL_CHECKPOINT_INTERVAL`   | `10`         | Pages between checkpoints       |
+| `LOG_LEVEL`                   | `INFO`       | Logging level                   |
 
 ## Architecture
 
