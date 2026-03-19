@@ -31,7 +31,7 @@ A production-ready headless web crawler that renders JavaScript-heavy websites w
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/generic-web-crawler.git
+git clone https://github.com/theraghav-ai/generic-web-crawler.git
 cd generic-web-crawler
 
 # Install dependencies and Playwright Chromium
@@ -45,7 +45,7 @@ cd generic-web-crawler
 
 ```powershell
 # Clone the repository
-git clone https://github.com/<your-username>/generic-web-crawler.git
+git clone https://github.com/theraghav-ai/generic-web-crawler.git
 cd generic-web-crawler
 
 # Install dependencies and Playwright Chromium
@@ -59,7 +59,7 @@ cd generic-web-crawler
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/generic-web-crawler.git
+git clone https://github.com/theraghav-ai/generic-web-crawler.git
 cd generic-web-crawler
 
 # Build and run
