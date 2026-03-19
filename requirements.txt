@@ -1,0 +1,6 @@
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.1.0
+playwright>=1.49.0
+markdownify>=0.13.1
+python-dotenv>=1.0.0

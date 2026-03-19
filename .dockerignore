@@ -1,0 +1,13 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+.git/
+data/sites/
+data/snapshots/
+logs/
+.DS_Store
+*.md
+!README.md
+!CONTRIBUTING.md

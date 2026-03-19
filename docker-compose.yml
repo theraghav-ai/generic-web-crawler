@@ -1,0 +1,10 @@
+services:
+  crawler:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
